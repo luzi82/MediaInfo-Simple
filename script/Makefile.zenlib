@@ -1,0 +1,122 @@
+.PHONY : all
+
+PREFIX = zenlib
+
+OBJC = \
+	$(PREFIX)_Conf.o              \
+	$(PREFIX)_CriticalSection.o   \
+	$(PREFIX)_Dir.o               \
+	$(PREFIX)_File.o              \
+	$(PREFIX)_FileName.o          \
+	$(PREFIX)_InfoMap.o           \
+	$(PREFIX)_int128s.o           \
+	$(PREFIX)_int128u.o           \
+	$(PREFIX)_MemoryDebug.o       \
+	$(PREFIX)_OS_Utils.o          \
+	$(PREFIX)_Translation.o       \
+	$(PREFIX)_Utils.o             \
+	$(PREFIX)_Ztring.o            \
+	$(PREFIX)_ZtringList.o        \
+	$(PREFIX)_ZtringListList.o    \
+	$(PREFIX)_ZtringListListF.o   \
+	$(PREFIX)_Html_Handler.o      \
+	$(PREFIX)_Html_Request.o      \
+	$(PREFIX)_Http_Cookies.o      \
+	$(PREFIX)_Http_Handler.o      \
+	$(PREFIX)_Http_Request.o      \
+	$(PREFIX)_Http_Utils.o        \
+	$(PREFIX)_tinyxml.o           \
+	$(PREFIX)_tinyxmlerror.o      \
+	$(PREFIX)_tinyxmlparser.o     
+
+#	$(PREFIX)_Thread.o
+	
+FOLDER = MediaInfo_CLI_GNU_FromSource/ZenLib/Source/ZenLib
+INCLUDES = -IMediaInfo_CLI_GNU_FromSource/ZenLib/Source
+
+CXX = g++
+CXXFLAGS = -DUNICODE -D_LARGE_FILES -D_FILE_OFFSET_BITS=64 -O2
+AR=ar rc
+
+all : $(PREFIX).a
+
+$(PREFIX).a: $(OBJC)
+	$(AR) $@ $(OBJC)
+
+$(PREFIX)_Conf.o              : $(FOLDER)/Conf.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_CriticalSection.o   : $(FOLDER)/CriticalSection.cpp          
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_Dir.o               : $(FOLDER)/Dir.cpp                      
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File.o              : $(FOLDER)/File.cpp                     
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_FileName.o          : $(FOLDER)/FileName.cpp                 
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_InfoMap.o           : $(FOLDER)/InfoMap.cpp                  
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_int128s.o           : $(FOLDER)/int128s.cpp                  
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_int128u.o           : $(FOLDER)/int128u.cpp                  
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_MemoryDebug.o       : $(FOLDER)/MemoryDebug.cpp              
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_OS_Utils.o          : $(FOLDER)/OS_Utils.cpp                 
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_Translation.o       : $(FOLDER)/Translation.cpp              
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_Thread.o            : $(FOLDER)/Thread.cpp                   
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_Utils.o             : $(FOLDER)/Utils.cpp                    
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_Ztring.o            : $(FOLDER)/Ztring.cpp                   
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_ZtringList.o        : $(FOLDER)/ZtringList.cpp               
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_ZtringListList.o    : $(FOLDER)/ZtringListList.cpp           
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_ZtringListListF.o   : $(FOLDER)/ZtringListListF.cpp          
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_Html_Handler.o      : $(FOLDER)/Format/Html/Html_Handler.cpp 
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_Html_Request.o      : $(FOLDER)/Format/Html/Html_Request.cpp 
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_Http_Cookies.o      : $(FOLDER)/Format/Http/Http_Cookies.cpp 
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_Http_Handler.o      : $(FOLDER)/Format/Http/Http_Handler.cpp 
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_Http_Request.o      : $(FOLDER)/Format/Http/Http_Request.cpp 
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_Http_Utils.o        : $(FOLDER)/Format/Http/Http_Utils.cpp   
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_tinyxml.o           : $(FOLDER)/TinyXml/tinyxml.cpp          
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_tinyxmlerror.o      : $(FOLDER)/TinyXml/tinyxmlerror.cpp     
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_tinyxmlparser.o     : $(FOLDER)/TinyXml/tinyxmlparser.cpp    
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@

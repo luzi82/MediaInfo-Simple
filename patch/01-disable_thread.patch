@@ -1,0 +1,225 @@
+diff -rupN tmp.orig/MediaInfo_CLI_GNU_FromSource/MediaInfoLib/Source/MediaInfo/MediaInfo_Internal.cpp tmp/MediaInfo_CLI_GNU_FromSource/MediaInfoLib/Source/MediaInfo/MediaInfo_Internal.cpp
+--- tmp.orig/MediaInfo_CLI_GNU_FromSource/MediaInfoLib/Source/MediaInfo/MediaInfo_Internal.cpp	2012-01-19 21:15:08.337355825 +0800
++++ tmp/MediaInfo_CLI_GNU_FromSource/MediaInfoLib/Source/MediaInfo/MediaInfo_Internal.cpp	2012-01-19 21:20:41.717134690 +0800
+@@ -276,7 +276,9 @@ using namespace MediaInfo_Debug_MediaInf
+ 
+ //---------------------------------------------------------------------------
+ MediaInfo_Internal::MediaInfo_Internal()
++#ifdef ENABLE_THREAD
+ : Thread()
++#endif
+ {
+     CriticalSectionLocker CSL(CS);
+ 
+@@ -349,6 +351,7 @@ size_t MediaInfo_Internal::Open(const St
+     CS.Leave();
+ 
+     //Parsing
++#ifdef ENABLE_THREAD
+     if (BlockMethod==1)
+     {
+         if (!IsInThread) //If already created, the routine will read the new files
+@@ -360,9 +363,12 @@ size_t MediaInfo_Internal::Open(const St
+     }
+     else
+     {
++#endif
+         Entry(); //Normal parsing
+         return Count_Get(Stream_General);
++#ifdef ENABLE_THREAD
+     }
++#endif
+ }
+ 
+ //---------------------------------------------------------------------------
+@@ -716,12 +722,14 @@ std::bitset<32> MediaInfo_Internal::Open
+ //---------------------------------------------------------------------------
+ void MediaInfo_Internal::Close()
+ {
++#ifdef ENABLE_THREAD
+     if (IsRunning())
+     {
+         RequestTerminate();
+         while(IsExited())
+             Yield();
+     }
++#endif // ENABLE_THREAD
+ 
+     CriticalSectionLocker CSL(CS);
+     MEDIAINFO_DEBUG_CONFIG_TEXT(Debug+=_T("Close");)
+diff -rupN tmp.orig/MediaInfo_CLI_GNU_FromSource/MediaInfoLib/Source/MediaInfo/MediaInfo_Internal.h tmp/MediaInfo_CLI_GNU_FromSource/MediaInfoLib/Source/MediaInfo/MediaInfo_Internal.h
+--- tmp.orig/MediaInfo_CLI_GNU_FromSource/MediaInfoLib/Source/MediaInfo/MediaInfo_Internal.h	2012-01-19 22:52:31.810552094 +0800
++++ tmp/MediaInfo_CLI_GNU_FromSource/MediaInfoLib/Source/MediaInfo/MediaInfo_Internal.h	2012-01-19 22:52:31.806552580 +0800
+@@ -66,7 +66,11 @@ class Reader__Base;
+ /// @version 0.7
+ //***************************************************************************
+ 
++#ifdef ENABLE_THREAD
+ class MediaInfo_Internal : public ZenLib::Thread
++#else
++class MediaInfo_Internal
++#endif // ENABLE_THREAD
+ {
+ public :
+     //Constructor/Destructor
+diff -rupN tmp.orig/MediaInfo_CLI_GNU_FromSource/MediaInfoLib/Source/MediaInfo/MediaInfoList_Internal.cpp tmp/MediaInfo_CLI_GNU_FromSource/MediaInfoLib/Source/MediaInfo/MediaInfoList_Internal.cpp
+--- tmp.orig/MediaInfo_CLI_GNU_FromSource/MediaInfoLib/Source/MediaInfo/MediaInfoList_Internal.cpp	2012-01-15 22:46:25.567136038 +0800
++++ tmp/MediaInfo_CLI_GNU_FromSource/MediaInfoLib/Source/MediaInfo/MediaInfoList_Internal.cpp	2012-01-19 22:53:07.058250338 +0800
+@@ -54,7 +54,9 @@ extern MediaInfo_Config Config;
+ //---------------------------------------------------------------------------
+ //Constructeurs
+ MediaInfoList_Internal::MediaInfoList_Internal(size_t Count_Init)
++#ifdef ENABLE_THREAD
+ : Thread()
++#endif // ENABLE_THREAD
+ {
+     CriticalSectionLocker CSL(CS);
+     
+@@ -148,6 +150,7 @@ size_t MediaInfoList_Internal::Open(cons
+     CS.Leave();
+ 
+     //Parsing
++#ifdef ENABLE_THREAD
+     if (BlockMethod==1)
+     {
+         CS.Enter();
+@@ -161,9 +164,12 @@ size_t MediaInfoList_Internal::Open(cons
+     }
+     else
+     {
++#endif // ENABLE_THREAD
+         Entry(); //Normal parsing
+         return Count_Get();
++#ifdef ENABLE_THREAD
+     }
++#endif // ENABLE_THREAD
+ }
+ 
+ void MediaInfoList_Internal::Entry()
+@@ -179,9 +185,12 @@ void MediaInfoList_Internal::Entry()
+             MediaInfo* MI=new MediaInfo();
+             for (std::map<String, String>::iterator Config_MediaInfo_Item=Config_MediaInfo_Items.begin(); Config_MediaInfo_Item!=Config_MediaInfo_Items.end(); Config_MediaInfo_Item++)
+                 MI->Option(Config_MediaInfo_Item->first, Config_MediaInfo_Item->second);
++#ifdef ENABLE_THREAD
+             if (BlockMethod==1)
+                 MI->Option(_T("Thread"), _T("1"));
++#endif // ENABLE_THREAD
+             MI->Open(ToParse.front());
++#ifdef ENABLE_THREAD
+             if (BlockMethod==1)
+             {
+                 CS.Leave();
+@@ -199,11 +208,13 @@ void MediaInfoList_Internal::Entry()
+                 }
+                 CS.Enter();
+             }
++#endif // ENABLE_THREAD
+             Info.push_back(MI);
+             ToParse.pop();
+             ToParse_AlreadyDone++;
+             State=ToParse_AlreadyDone*10000/ToParse_Total;
+         }
++#ifdef ENABLE_THREAD
+         if (IsTerminating() || State==10000)
+         {
+             CS.Leave();
+@@ -211,7 +222,15 @@ void MediaInfoList_Internal::Entry()
+         }
+         CS.Leave();
+         Yield();
+-    }
++#else // ENABLE_THREAD
++        if (State==10000)
++        {
++            CS.Leave();
++            break;
++        }
++        CS.Leave();
++#endif // else ENABLE_THREAD
++	}
+ }
+ 
+ //---------------------------------------------------------------------------
+@@ -266,12 +285,14 @@ size_t MediaInfoList_Internal::Save(size
+ //---------------------------------------------------------------------------
+ void MediaInfoList_Internal::Close(size_t FilePos)
+ {
++#ifdef ENABLE_THREAD
+     if (IsRunning())
+     {
+         RequestTerminate();
+         while(IsExited())
+             Yield();
+     }
++#endif // ENABLE_THREAD
+ 
+     CriticalSectionLocker CSL(CS);
+     if (FilePos==Unlimited)
+@@ -427,11 +448,13 @@ String MediaInfoList_Internal::Option (c
+         Info[Info.size()-1]->Option(Option, Value);
+         return _T("");
+     }
++#ifdef ENABLE_THREAD
+     else if (OptionLower==_T("thread"))
+     {
+         BlockMethod=1;
+         return _T("");
+     }
++#endif // ENABLE_THREAD
+     else if (OptionLower.find(_T("file_"))==0)
+     {
+         Config_MediaInfo_Items[Option]=Value;
+diff -rupN tmp.orig/MediaInfo_CLI_GNU_FromSource/MediaInfoLib/Source/MediaInfo/MediaInfoList_Internal.h tmp/MediaInfo_CLI_GNU_FromSource/MediaInfoLib/Source/MediaInfo/MediaInfoList_Internal.h
+--- tmp.orig/MediaInfo_CLI_GNU_FromSource/MediaInfoLib/Source/MediaInfo/MediaInfoList_Internal.h	2012-01-19 23:01:00.804621352 +0800
++++ tmp/MediaInfo_CLI_GNU_FromSource/MediaInfoLib/Source/MediaInfo/MediaInfoList_Internal.h	2012-01-19 23:04:21.556295367 +0800
+@@ -40,7 +40,11 @@
+ namespace MediaInfoLib
+ {
+ 
++#ifdef ENABLE_THREAD
+ class MediaInfoList_Internal : public ZenLib::Thread
++#else
++class MediaInfoList_Internal
++#endif // ENABLE_THREAD
+ {
+ public :
+     //Class
+diff -rupN tmp.orig/MediaInfo_CLI_GNU_FromSource/MediaInfoLib/Source/MediaInfo/Reader/Reader_File.cpp tmp/MediaInfo_CLI_GNU_FromSource/MediaInfoLib/Source/MediaInfo/Reader/Reader_File.cpp
+--- tmp.orig/MediaInfo_CLI_GNU_FromSource/MediaInfoLib/Source/MediaInfo/Reader/Reader_File.cpp	2012-01-15 22:46:25.531134641 +0800
++++ tmp/MediaInfo_CLI_GNU_FromSource/MediaInfoLib/Source/MediaInfo/Reader/Reader_File.cpp	2012-01-15 23:30:25.301969425 +0800
+@@ -195,9 +195,11 @@ size_t Reader_File::Format_Test_PerParse
+                 return 2; //Must return immediately
+         #endif //MEDIAINFO_DEMUX
+ 
++#ifdef ENABLE_THREAD
+         //Threading
+         if (MI->IsTerminating())
+             return 1; //Termination is requested
++#endif // ENABLE_THREAD
+ 
+         if (Status[File__Analyze::IsFinished] || (StopAfterFilled && Status[File__Analyze::IsFilled]))
+             ShouldContinue=false;
+@@ -215,9 +217,11 @@ size_t Reader_File::Format_Test_PerParse
+         if (MI->Config.Demux_EventWasSent)
+             return 2; //Must return immediately
+ 
++#ifdef ENABLE_THREAD
+         //Threading
+         if (MI->IsTerminating())
+             return 1; //Termination is requested
++#endif // ENABLE_THREAD
+ 
+         if (Status[File__Analyze::IsFinished] || (StopAfterFilled && Status[File__Analyze::IsFilled]))
+             ShouldContinue=false;
+@@ -314,9 +318,11 @@ size_t Reader_File::Format_Test_PerParse
+                     return 2; //Must return immediately
+             #endif //MEDIAINFO_DEMUX
+ 
++#ifdef ENABLE_THREAD
+             //Threading
+             if (MI->IsTerminating())
+                 break; //Termination is requested
++#endif // ENABLE_THREAD
+         }
+     }
+ 

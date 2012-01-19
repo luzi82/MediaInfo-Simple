@@ -1,0 +1,673 @@
+.PHONY : all
+
+PREFIX = mediainfolib
+
+OBJC = \
+	$(PREFIX)_File__Analyze.o \
+	$(PREFIX)_File__Analyze_Buffer.o \
+	$(PREFIX)_File__Analyze_Buffer_MinimizeSize.o \
+	$(PREFIX)_File__Analyze_Streams.o \
+	$(PREFIX)_File__Analyze_Streams_Finish.o \
+	$(PREFIX)_File__Base.o \
+	$(PREFIX)_File__MultipleParsing.o \
+	$(PREFIX)_File__Duplicate.o \
+	$(PREFIX)_File_Dummy.o \
+	$(PREFIX)_File_Other.o \
+	$(PREFIX)_File_Unknown.o \
+	$(PREFIX)_MediaInfo.o \
+	$(PREFIX)_MediaInfo_Config.o \
+	$(PREFIX)_MediaInfo_Config_Automatic.o \
+	$(PREFIX)_MediaInfo_Config_MediaInfo.o \
+	$(PREFIX)_MediaInfo_File.o \
+	$(PREFIX)_MediaInfo_Inform.o \
+	$(PREFIX)_MediaInfo_Internal.o \
+	$(PREFIX)_MediaInfoList.o \
+	$(PREFIX)_MediaInfoList_Internal.o \
+	$(PREFIX)_TimeCode.o \
+	$(PREFIX)_File_7z.o \
+	$(PREFIX)_File_Ace.o \
+	$(PREFIX)_File_Bzip2.o \
+	$(PREFIX)_File_Elf.o \
+	$(PREFIX)_File_Gzip.o \
+	$(PREFIX)_File_Iso9660.o \
+	$(PREFIX)_File_Mz.o \
+	$(PREFIX)_File_Rar.o \
+	$(PREFIX)_File_Tar.o \
+	$(PREFIX)_File_Zip.o \
+	$(PREFIX)_File_Aac.o \
+	$(PREFIX)_File_Aac_GeneralAudio.o \
+	$(PREFIX)_File_Aac_GeneralAudio_Sbr.o \
+	$(PREFIX)_File_Aac_GeneralAudio_Sbr_Ps.o \
+	$(PREFIX)_File_Aac_Main.o \
+	$(PREFIX)_File_Aac_Others.o \
+	$(PREFIX)_File_Ac3.o \
+	$(PREFIX)_File_Adpcm.o \
+	$(PREFIX)_File_Aes3.o \
+	$(PREFIX)_File_Als.o \
+	$(PREFIX)_File_Amr.o \
+	$(PREFIX)_File_Amv.o \
+	$(PREFIX)_File_Ape.o \
+	$(PREFIX)_File_Au.o \
+	$(PREFIX)_File_Celt.o \
+	$(PREFIX)_File_ChannelGrouping.o \
+	$(PREFIX)_File_Dts.o \
+	$(PREFIX)_File_DolbyE.o \
+	$(PREFIX)_File_ExtendedModule.o \
+	$(PREFIX)_File_Flac.o \
+	$(PREFIX)_File_ImpulseTracker.o \
+	$(PREFIX)_File_La.o \
+	$(PREFIX)_File_Midi.o \
+	$(PREFIX)_File_Module.o \
+	$(PREFIX)_File_Mpc.o \
+	$(PREFIX)_File_MpcSv8.o \
+	$(PREFIX)_File_Mpega.o \
+	$(PREFIX)_File_Pcm.o \
+	$(PREFIX)_File_Ps2Audio.o \
+	$(PREFIX)_File_Rkau.o \
+	$(PREFIX)_File_ScreamTracker3.o \
+	$(PREFIX)_File_Speex.o \
+	$(PREFIX)_File_Tak.o \
+	$(PREFIX)_File_Tta.o \
+	$(PREFIX)_File_TwinVQ.o \
+	$(PREFIX)_File_Vorbis.o \
+	$(PREFIX)_File_Wvpk.o \
+	$(PREFIX)_File__Duplicate__Base.o \
+	$(PREFIX)_File__Duplicate__Writer.o \
+	$(PREFIX)_File__Duplicate_MpegTs.o \
+	$(PREFIX)_Export_Mpeg7.o \
+	$(PREFIX)_Export_PBCore.o \
+	$(PREFIX)_File_Bmp.o \
+	$(PREFIX)_File_Dpx.o \
+	$(PREFIX)_File_Exr.o \
+	$(PREFIX)_File_Gif.o \
+	$(PREFIX)_File_Ico.o \
+	$(PREFIX)_File_Jpeg.o \
+	$(PREFIX)_File_Png.o \
+	$(PREFIX)_File_Rle.o \
+	$(PREFIX)_File_Tiff.o \
+	$(PREFIX)_File_Tga.o \
+	$(PREFIX)_File__ReferenceFilesHelper.o \
+	$(PREFIX)_File_Ancillary.o \
+	$(PREFIX)_File_Bdmv.o \
+	$(PREFIX)_File_Cdxa.o \
+	$(PREFIX)_File_Dcp.o \
+	$(PREFIX)_File_Dpg.o \
+	$(PREFIX)_File_DvDif.o \
+	$(PREFIX)_File_DvDif_Analysis.o \
+	$(PREFIX)_File_Dvdv.o \
+	$(PREFIX)_File_Dxw.o \
+	$(PREFIX)_File_Flv.o \
+	$(PREFIX)_File_Gxf.o \
+	$(PREFIX)_File_Gxf_TimeCode.o \
+	$(PREFIX)_File_Ibi.o \
+	$(PREFIX)_File_Ibi_Creation.o \
+	$(PREFIX)_File_Ism.o \
+	$(PREFIX)_File_Ivf.o \
+	$(PREFIX)_File_Lxf.o \
+	$(PREFIX)_File_Mk.o \
+	$(PREFIX)_File_Mpeg4.o \
+	$(PREFIX)_File_Mpeg4_Descriptors.o \
+	$(PREFIX)_File_Mpeg4_Elements.o \
+	$(PREFIX)_File_Mpeg4_TimeCode.o \
+	$(PREFIX)_File_Mpeg_Descriptors.o \
+	$(PREFIX)_File_Mpeg_Psi.o \
+	$(PREFIX)_File_MpegPs.o \
+	$(PREFIX)_File_MpegTs.o \
+	$(PREFIX)_File_MpegTs_Duplicate.o \
+	$(PREFIX)_File_Mxf.o \
+	$(PREFIX)_File_Nut.o \
+	$(PREFIX)_File_Ogg.o \
+	$(PREFIX)_File_Ogg_SubElement.o \
+	$(PREFIX)_File_P2_Clip.o \
+	$(PREFIX)_File_Riff.o \
+	$(PREFIX)_File_Riff_Elements.o \
+	$(PREFIX)_File_Rm.o \
+	$(PREFIX)_File_Skm.o \
+	$(PREFIX)_File_Swf.o \
+	$(PREFIX)_File_Umf.o \
+	$(PREFIX)_File_Wm.o \
+	$(PREFIX)_File_Wm_Elements.o \
+	$(PREFIX)_File_Xdcam_Clip.o \
+	$(PREFIX)_Reader_Directory.o \
+	$(PREFIX)_Reader_File.o \
+	$(PREFIX)_Reader_libcurl.o \
+	$(PREFIX)_Reader_libmms.o \
+	$(PREFIX)_File__Tags.o \
+	$(PREFIX)_File_ApeTag.o \
+	$(PREFIX)_File_Id3.o \
+	$(PREFIX)_File_Id3v2.o \
+	$(PREFIX)_File_Lyrics3.o \
+	$(PREFIX)_File_Lyrics3v2.o \
+	$(PREFIX)_File_VorbisCom.o \
+	$(PREFIX)_File_Cdp.o \
+	$(PREFIX)_File_Cmml.o \
+	$(PREFIX)_File_DvbSubtitle.o \
+	$(PREFIX)_File_DtvccTransport.o \
+	$(PREFIX)_File_Kate.o \
+	$(PREFIX)_File_Eia608.o \
+	$(PREFIX)_File_Eia708.o \
+	$(PREFIX)_File_N19.o \
+	$(PREFIX)_File_OtherText.o \
+	$(PREFIX)_File_Pgs.o \
+	$(PREFIX)_File_Scc.o \
+	$(PREFIX)_File_Scte20.o \
+	$(PREFIX)_File_Teletext.o \
+	$(PREFIX)_File_Avc.o \
+	$(PREFIX)_File_Avc_Duplicate.o \
+	$(PREFIX)_File_AvsV.o \
+	$(PREFIX)_File_AfdBarData.o \
+	$(PREFIX)_File_Dirac.o \
+	$(PREFIX)_File_Flic.o \
+	$(PREFIX)_File_Fraps.o \
+	$(PREFIX)_File_Lagarith.o \
+	$(PREFIX)_File_Mpeg4v.o \
+	$(PREFIX)_File_Mpegv.o \
+	$(PREFIX)_File_Theora.o \
+	$(PREFIX)_File_Vc1.o \
+	$(PREFIX)_File_Vc3.o \
+	$(PREFIX)_File_Y4m.o
+
+	
+FOLDER = MediaInfo_CLI_GNU_FromSource/MediaInfoLib/Source/MediaInfo
+INCLUDES = \
+	-IMediaInfo_CLI_GNU_FromSource/MediaInfoLib/Source \
+	-IMediaInfo_CLI_GNU_FromSource/ZenLib/Source
+
+CXX = g++
+CXXFLAGS = -DUNICODE -DMEDIAINFO_LIBCURL_NO -DMEDIAINFO_LIBMMS_NO -DUNICODE -O2
+AR=ar rc
+
+all : $(PREFIX).a
+
+$(PREFIX).a: $(OBJC)
+	$(AR) $@ $(OBJC)
+
+$(PREFIX)_File__Analyze.o                     : $(FOLDER)/File__Analyze.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File__Analyze_Buffer.o              : $(FOLDER)/File__Analyze_Buffer.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File__Analyze_Buffer_MinimizeSize.o : $(FOLDER)/File__Analyze_Buffer_MinimizeSize.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File__Analyze_Streams.o             : $(FOLDER)/File__Analyze_Streams.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File__Analyze_Streams_Finish.o      : $(FOLDER)/File__Analyze_Streams_Finish.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File__Base.o                        : $(FOLDER)/File__Base.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File__MultipleParsing.o             : $(FOLDER)/File__MultipleParsing.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File__Duplicate.o                   : $(FOLDER)/File__Duplicate.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Dummy.o                        : $(FOLDER)/File_Dummy.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Other.o                        : $(FOLDER)/File_Other.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Unknown.o                      : $(FOLDER)/File_Unknown.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_MediaInfo.o                         : $(FOLDER)/MediaInfo.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_MediaInfo_Config.o                  : $(FOLDER)/MediaInfo_Config.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_MediaInfo_Config_Automatic.o        : $(FOLDER)/MediaInfo_Config_Automatic.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_MediaInfo_Config_MediaInfo.o        : $(FOLDER)/MediaInfo_Config_MediaInfo.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_MediaInfo_File.o                    : $(FOLDER)/MediaInfo_File.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_MediaInfo_Inform.o                  : $(FOLDER)/MediaInfo_Inform.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_MediaInfo_Internal.o                : $(FOLDER)/MediaInfo_Internal.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_MediaInfoList.o                     : $(FOLDER)/MediaInfoList.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_MediaInfoList_Internal.o            : $(FOLDER)/MediaInfoList_Internal.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_TimeCode.o                          : $(FOLDER)/TimeCode.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_7z.o                           : $(FOLDER)/Archive/File_7z.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Ace.o                          : $(FOLDER)/Archive/File_Ace.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Bzip2.o                        : $(FOLDER)/Archive/File_Bzip2.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Elf.o                          : $(FOLDER)/Archive/File_Elf.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Gzip.o                         : $(FOLDER)/Archive/File_Gzip.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Iso9660.o                      : $(FOLDER)/Archive/File_Iso9660.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Mz.o                           : $(FOLDER)/Archive/File_Mz.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Rar.o                          : $(FOLDER)/Archive/File_Rar.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Tar.o                          : $(FOLDER)/Archive/File_Tar.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Zip.o                          : $(FOLDER)/Archive/File_Zip.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Aac.o                          : $(FOLDER)/Audio/File_Aac.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Aac_GeneralAudio.o             : $(FOLDER)/Audio/File_Aac_GeneralAudio.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Aac_GeneralAudio_Sbr.o         : $(FOLDER)/Audio/File_Aac_GeneralAudio_Sbr.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Aac_GeneralAudio_Sbr_Ps.o      : $(FOLDER)/Audio/File_Aac_GeneralAudio_Sbr_Ps.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Aac_Main.o                     : $(FOLDER)/Audio/File_Aac_Main.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Aac_Others.o                   : $(FOLDER)/Audio/File_Aac_Others.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Ac3.o                          : $(FOLDER)/Audio/File_Ac3.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Adpcm.o                        : $(FOLDER)/Audio/File_Adpcm.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Aes3.o                         : $(FOLDER)/Audio/File_Aes3.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Als.o                          : $(FOLDER)/Audio/File_Als.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Amr.o                          : $(FOLDER)/Audio/File_Amr.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Amv.o                          : $(FOLDER)/Audio/File_Amv.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Ape.o                          : $(FOLDER)/Audio/File_Ape.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Au.o                           : $(FOLDER)/Audio/File_Au.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Celt.o                         : $(FOLDER)/Audio/File_Celt.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_ChannelGrouping.o              : $(FOLDER)/Audio/File_ChannelGrouping.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Dts.o                          : $(FOLDER)/Audio/File_Dts.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_DolbyE.o                       : $(FOLDER)/Audio/File_DolbyE.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_ExtendedModule.o               : $(FOLDER)/Audio/File_ExtendedModule.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Flac.o                         : $(FOLDER)/Audio/File_Flac.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_ImpulseTracker.o               : $(FOLDER)/Audio/File_ImpulseTracker.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_La.o                           : $(FOLDER)/Audio/File_La.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Midi.o                         : $(FOLDER)/Audio/File_Midi.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Module.o                       : $(FOLDER)/Audio/File_Module.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Mpc.o                          : $(FOLDER)/Audio/File_Mpc.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_MpcSv8.o                       : $(FOLDER)/Audio/File_MpcSv8.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Mpega.o                        : $(FOLDER)/Audio/File_Mpega.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Pcm.o                          : $(FOLDER)/Audio/File_Pcm.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Ps2Audio.o                     : $(FOLDER)/Audio/File_Ps2Audio.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Rkau.o                         : $(FOLDER)/Audio/File_Rkau.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_ScreamTracker3.o               : $(FOLDER)/Audio/File_ScreamTracker3.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Speex.o                        : $(FOLDER)/Audio/File_Speex.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Tak.o                          : $(FOLDER)/Audio/File_Tak.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Tta.o                          : $(FOLDER)/Audio/File_Tta.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_TwinVQ.o                       : $(FOLDER)/Audio/File_TwinVQ.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Vorbis.o                       : $(FOLDER)/Audio/File_Vorbis.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Wvpk.o                         : $(FOLDER)/Audio/File_Wvpk.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File__Duplicate__Base.o             : $(FOLDER)/Duplicate/File__Duplicate__Base.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File__Duplicate__Writer.o           : $(FOLDER)/Duplicate/File__Duplicate__Writer.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File__Duplicate_MpegTs.o            : $(FOLDER)/Duplicate/File__Duplicate_MpegTs.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_Export_Mpeg7.o                      : $(FOLDER)/Export/Export_Mpeg7.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_Export_PBCore.o                     : $(FOLDER)/Export/Export_PBCore.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Bmp.o                          : $(FOLDER)/Image/File_Bmp.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Dpx.o                          : $(FOLDER)/Image/File_Dpx.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Exr.o                          : $(FOLDER)/Image/File_Exr.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Gif.o                          : $(FOLDER)/Image/File_Gif.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Ico.o                          : $(FOLDER)/Image/File_Ico.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Jpeg.o                         : $(FOLDER)/Image/File_Jpeg.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Png.o                          : $(FOLDER)/Image/File_Png.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Rle.o                          : $(FOLDER)/Image/File_Rle.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Tiff.o                         : $(FOLDER)/Image/File_Tiff.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Tga.o                          : $(FOLDER)/Image/File_Tga.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File__ReferenceFilesHelper.o        : $(FOLDER)/Multiple/File__ReferenceFilesHelper.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Ancillary.o                    : $(FOLDER)/Multiple/File_Ancillary.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Bdmv.o                         : $(FOLDER)/Multiple/File_Bdmv.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Cdxa.o                         : $(FOLDER)/Multiple/File_Cdxa.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Dcp.o                          : $(FOLDER)/Multiple/File_Dcp.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Dpg.o                          : $(FOLDER)/Multiple/File_Dpg.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_DvDif.o                        : $(FOLDER)/Multiple/File_DvDif.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_DvDif_Analysis.o               : $(FOLDER)/Multiple/File_DvDif_Analysis.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Dvdv.o                         : $(FOLDER)/Multiple/File_Dvdv.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Dxw.o                          : $(FOLDER)/Multiple/File_Dxw.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Flv.o                          : $(FOLDER)/Multiple/File_Flv.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Gxf.o                          : $(FOLDER)/Multiple/File_Gxf.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Gxf_TimeCode.o                 : $(FOLDER)/Multiple/File_Gxf_TimeCode.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Ibi.o                          : $(FOLDER)/Multiple/File_Ibi.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Ibi_Creation.o                 : $(FOLDER)/Multiple/File_Ibi_Creation.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Ism.o                          : $(FOLDER)/Multiple/File_Ism.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Ivf.o                          : $(FOLDER)/Multiple/File_Ivf.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Lxf.o                          : $(FOLDER)/Multiple/File_Lxf.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Mk.o                           : $(FOLDER)/Multiple/File_Mk.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Mpeg4.o                        : $(FOLDER)/Multiple/File_Mpeg4.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Mpeg4_Descriptors.o            : $(FOLDER)/Multiple/File_Mpeg4_Descriptors.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Mpeg4_Elements.o               : $(FOLDER)/Multiple/File_Mpeg4_Elements.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Mpeg4_TimeCode.o               : $(FOLDER)/Multiple/File_Mpeg4_TimeCode.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Mpeg_Descriptors.o             : $(FOLDER)/Multiple/File_Mpeg_Descriptors.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Mpeg_Psi.o                     : $(FOLDER)/Multiple/File_Mpeg_Psi.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_MpegPs.o                       : $(FOLDER)/Multiple/File_MpegPs.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_MpegTs.o                       : $(FOLDER)/Multiple/File_MpegTs.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_MpegTs_Duplicate.o             : $(FOLDER)/Multiple/File_MpegTs_Duplicate.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Mxf.o                          : $(FOLDER)/Multiple/File_Mxf.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Nut.o                          : $(FOLDER)/Multiple/File_Nut.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Ogg.o                          : $(FOLDER)/Multiple/File_Ogg.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Ogg_SubElement.o               : $(FOLDER)/Multiple/File_Ogg_SubElement.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_P2_Clip.o                      : $(FOLDER)/Multiple/File_P2_Clip.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Riff.o                         : $(FOLDER)/Multiple/File_Riff.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Riff_Elements.o                : $(FOLDER)/Multiple/File_Riff_Elements.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Rm.o                           : $(FOLDER)/Multiple/File_Rm.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Skm.o                          : $(FOLDER)/Multiple/File_Skm.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Swf.o                          : $(FOLDER)/Multiple/File_Swf.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Umf.o                          : $(FOLDER)/Multiple/File_Umf.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Wm.o                           : $(FOLDER)/Multiple/File_Wm.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Wm_Elements.o                  : $(FOLDER)/Multiple/File_Wm_Elements.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Xdcam_Clip.o                   : $(FOLDER)/Multiple/File_Xdcam_Clip.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_Reader_Directory.o                  : $(FOLDER)/Reader/Reader_Directory.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_Reader_File.o                       : $(FOLDER)/Reader/Reader_File.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_Reader_libcurl.o                    : $(FOLDER)/Reader/Reader_libcurl.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_Reader_libmms.o                     : $(FOLDER)/Reader/Reader_libmms.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File__Tags.o                        : $(FOLDER)/Tag/File__Tags.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_ApeTag.o                       : $(FOLDER)/Tag/File_ApeTag.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Id3.o                          : $(FOLDER)/Tag/File_Id3.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Id3v2.o                        : $(FOLDER)/Tag/File_Id3v2.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Lyrics3.o                      : $(FOLDER)/Tag/File_Lyrics3.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Lyrics3v2.o                    : $(FOLDER)/Tag/File_Lyrics3v2.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_VorbisCom.o                    : $(FOLDER)/Tag/File_VorbisCom.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Cdp.o                          : $(FOLDER)/Text/File_Cdp.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Cmml.o                         : $(FOLDER)/Text/File_Cmml.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_DvbSubtitle.o                  : $(FOLDER)/Text/File_DvbSubtitle.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_DtvccTransport.o               : $(FOLDER)/Text/File_DtvccTransport.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Kate.o                         : $(FOLDER)/Text/File_Kate.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Eia608.o                       : $(FOLDER)/Text/File_Eia608.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Eia708.o                       : $(FOLDER)/Text/File_Eia708.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_N19.o                          : $(FOLDER)/Text/File_N19.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_OtherText.o                    : $(FOLDER)/Text/File_OtherText.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Pgs.o                          : $(FOLDER)/Text/File_Pgs.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Scc.o                          : $(FOLDER)/Text/File_Scc.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Scte20.o                       : $(FOLDER)/Text/File_Scte20.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Teletext.o                     : $(FOLDER)/Text/File_Teletext.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Avc.o                          : $(FOLDER)/Video/File_Avc.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Avc_Duplicate.o                : $(FOLDER)/Video/File_Avc_Duplicate.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_AvsV.o                         : $(FOLDER)/Video/File_AvsV.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_AfdBarData.o                   : $(FOLDER)/Video/File_AfdBarData.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Dirac.o                        : $(FOLDER)/Video/File_Dirac.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Flic.o                         : $(FOLDER)/Video/File_Flic.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Fraps.o                        : $(FOLDER)/Video/File_Fraps.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Lagarith.o                     : $(FOLDER)/Video/File_Lagarith.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Mpeg4v.o                       : $(FOLDER)/Video/File_Mpeg4v.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Mpegv.o                        : $(FOLDER)/Video/File_Mpegv.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Theora.o                       : $(FOLDER)/Video/File_Theora.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Vc1.o                          : $(FOLDER)/Video/File_Vc1.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Vc3.o                          : $(FOLDER)/Video/File_Vc3.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_File_Y4m.o                          : $(FOLDER)/Video/File_Y4m.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+

@@ -1,0 +1,38 @@
+.PHONY : all
+
+PREFIX = mediainfo
+
+OBJC = \
+    $(PREFIX)_CLI_Main.o \
+    $(PREFIX)_CommandLine_Parser.o \
+    $(PREFIX)_Help.o \
+    $(PREFIX)_Core.o
+
+
+FOLDER = MediaInfo_CLI_GNU_FromSource/MediaInfo/Source
+INCLUDES = \
+	-IMediaInfo_CLI_GNU_FromSource/MediaInfo/Source \
+	-IMediaInfo_CLI_GNU_FromSource/MediaInfoLib/Source \
+	-IMediaInfo_CLI_GNU_FromSource/ZenLib/Source
+
+
+CXX = g++
+CXXFLAGS = -O2 -DUNICODE -DUNICODE -DUNICODE
+AR=ar rc
+	
+all : $(PREFIX).a
+
+$(PREFIX).a: $(OBJC)
+	$(AR) $@ $(OBJC)
+
+$(PREFIX)_CLI_Main.o            : $(FOLDER)/CLI/CLI_Main.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_CommandLine_Parser.o  : $(FOLDER)/CLI/CommandLine_Parser.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_Help.o                : $(FOLDER)/CLI/Help.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+$(PREFIX)_Core.o                : $(FOLDER)/Common/Core.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
