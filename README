@@ -1,0 +1,22 @@
+mediainfo-static
+
+Aim
+===
+
+Build mediainfo without:
+- worrying about dependencies, all provided here
+- configure-make
+- dynamic library
+- thread stuff
+
+Porting should be damn simple.
+
+
+How to build
+============
+
+Run:
+
+	./build.sh
+
+Tested in Ubuntu 10.10
